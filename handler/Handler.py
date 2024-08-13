@@ -103,35 +103,33 @@ class Handler:
             return {'status': 'OK', 'data': self.groupManager.get_group_messages(group_name=group_name)}
         else:
             return {'status': 'TOKEN_INVALID | NOT_FOUND'}         
-           
     def methodNum(self, method: str, data: dict, hash: CryptoServer):
         try:
-            match method:
-                case 'editMessage':
-                    return {"data_enc": self.editMessages(username=data['username'], token=data['token'], to=data['to'], message_id=data['message_id'], newMessage=data['newMessage'])}
-                case 'getUserInfo':
-                    return {"data_enc": self.getUserInfo(username=data['username'], token=data['token'])}
-                case 'getMemberGroup':
-                    return {"data_enc": self.getMembersList(username=data['username'], token=data['token'], group_name=data['group_name'])}               
-                case 'getChats':
-                    return {"data_enc": hash.encrypt(str(self.getChats(username=data['username'], token=data['token'])))}
-                case 'register':
-                    return {"data_enc": hash.encrypt(str(self.register(username=data['username'], phone_number=data['phone_number'], fullname=data['fullname'], profile=data.get('profile'))))}
-                case 'login':
-                    return {"data_enc": self.login(username=data['username'], phone_number=data['phone_number'], token=data['token'])}               
-                case 'getUsernameByID':
-                    return {"data_enc": self.getUsernameByID(username=data['username'], token=data['token'], getUser=data['getUser'])}
-                case 'getGroupByID':
-                    return {"data_enc": self.getGroupByID(username=data['username'], token=data['token'], group_name=data['group_name'])}
-                case 'getMessages':
-                    return {"data_enc": hash.encrypt(str(self.getMessages(username=data['username'], token=data['token'], user=data['user'])))}
-                case 'updateProfile':
-                    return {"data_enc": self.update_profile(username=data['username'], token=data['token'], data=data['update_data'])}
-                case _:
-                    return {
-                        'status': 'ERROR',
-                        'message': 'METHOD_INVALID'
-                    }
+            if method == 'editMessage':
+                return {"data_enc": self.editMessages(username=data['username'], token=data['token'], to=data['to'], message_id=data['message_id'], newMessage=data['newMessage'])}
+            elif method == 'getUserInfo':
+                return {"data_enc": self.getUserInfo(username=data['username'], token=data['token'])}
+            elif method == 'getMemberGroup':
+                return {"data_enc": self.getMembersList(username=data['username'], token=data['token'], group_name=data['group_name'])}               
+            elif method == 'getChats':
+                return {"data_enc": hash.encrypt(str(self.getChats(username=data['username'], token=data['token'])))}
+            elif method == 'register':
+                return {"data_enc": hash.encrypt(str(self.register(username=data['username'], phone_number=data['phone_number'], fullname=data['fullname'], profile=data.get('profile'))))}
+            elif method == 'login':
+                return {"data_enc": self.login(username=data['username'], phone_number=data['phone_number'], token=data['token'])}               
+            elif method == 'getUsernameByID':
+                return {"data_enc": self.getUsernameByID(username=data['username'], token=data['token'], getUser=data['getUser'])}
+            elif method == 'getGroupByID':
+                return {"data_enc": self.getGroupByID(username=data['username'], token=data['token'], group_name=data['group_name'])}
+            elif method == 'getMessages':
+                return {"data_enc": hash.encrypt(str(self.getMessages(username=data['username'], token=data['token'], user=data['user'])))}
+            elif method == 'updateProfile':
+                return {"data_enc": self.update_profile(username=data['username'], token=data['token'], data=data['update_data'])}
+            else:
+                return {
+                    'status': 'ERROR',
+                    'message': 'METHOD_INVALID'
+                }
         except Exception as e:
             logging.error(f"Error in methodNum: {str(e)}")
             return {
